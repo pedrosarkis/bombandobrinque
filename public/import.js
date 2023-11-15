@@ -1,39 +1,38 @@
 const fileInput = document.getElementById('image');
-const reader = new FileReader();
+const submitButton = document.getElementById('submit');
 
 fileInput.addEventListener('change', function () {
-  const file = fileInput.files[0];
+  const files = fileInput.files;
 
-  reader.onloadend = function () {
-    const base64Data = reader.result.split(',')[1];
-    // Agora, você pode enviar base64Data para o servidor
-    enviarImagemParaServidor(base64Data);
-  };
+  submitButton.addEventListener('click', function () {
+    if (files.length > 0) {
+      const formData = new FormData();
 
-  if (file) {
-    reader.readAsDataURL(file);
-  }
+      // Adiciona os arquivos ao FormData
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        formData.append('recfile', file, file.name);
+      }
+
+      // Adiciona outros dados ao FormData
+      formData.append('title', document.getElementById('title').value);
+      formData.append('description', document.getElementById('description').value);
+
+      enviarDadosParaServidor(formData);
+    } else {
+      console.warn('Nenhuma imagem para enviar.');
+    }
+  });
 });
 
-
-function enviarImagemParaServidor(base64Data, title, description) {
+function enviarDadosParaServidor(formData) {
   // URL do servidor
   const url = '/import';
-
-  // Dados a serem enviados para o servidor
-  const data = {
-    title: title,
-    description: description,
-    base64Data: base64Data,
-  };
 
   // Configuração do objeto de opções para a requisição POST
   const options = {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
+    body: formData,
   };
 
   // Envio da requisição
@@ -47,10 +46,3 @@ function enviarImagemParaServidor(base64Data, title, description) {
       // Aqui você pode lidar com erros, como exibir uma mensagem de erro
     });
 }
-
-// Exemplo de uso
-const base64Data = '...'; // Substitua isso pelo seu dado base64
-const title = 'Título da Imagem';
-const description = 'Descrição da Imagem';
-
-enviarImagemParaServidor(base64Data, title, description);

@@ -1,7 +1,9 @@
 'use strict'
 const mongoose = require('mongoose');
 
-const productSchema = {strict: false}
+
+// create a scrict false schema
+const productSchema = new mongoose.Schema({}, { strict: false });
 
 const Product = mongoose.model('Product', productSchema);
 

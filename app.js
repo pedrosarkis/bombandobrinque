@@ -3,7 +3,22 @@ const app = express();
 const ip = require('ip');
 const multer = require('multer');
 const mongoose = require('mongoose');
-// const product = require('./model');
+const product = require('./model');
+const _ = require('lodash');
+const fs = require('fs');
+// use dotenv 
+require('dotenv').config();
+const htmlDefault = require('./constants/htmlExample');
+
+//connect to database
+mongoose.connect(process.env.URL, { useNewUrlParser: true, useUnifiedTopology: true });
+// increase limit of json
+app.use(express.json({ limit: '50mb' }));
+
+function convertImageToBase64(filePath) {
+  const image = fs.readFileSync(filePath);
+  return image.toString('base64');
+}
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -12,16 +27,22 @@ const storage = multer.diskStorage({
     filename: function (req, file, cb) {
       cb(null, file.fieldname + '-' + Date.now() + '.jpg')
     }
-  });
-  
-  const upload = multer({ storage: storage });
+});
 
+const upload = multer({
+    storage: storage,
+    fileFilter: (req, file, cb) => {
+        if (file.originalname.match(/\.(jpg|jpeg|png|gif)$/)) {
+            cb(null, true);
+        } else {
+            cb(new Error('Formato de arquivo inválido.'));
+        }
+    },
+});
 
-app.use(express.json());
-//set public 
 app.use(express.static('public'));
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
@@ -31,22 +52,67 @@ app.get('/import',  (req, res) => {
     res.sendFile(__dirname + '/public/import.html');
 });
 
-app.post('/import', upload.array('image'), async (req, res) => {
+app.post('/writeHTML', async (req, res) => {
     try {
-      const { description, title } = req.body;
-      const images = req.files.map(file => file.filename);
-  
-      // Aqui você pode usar os dados para interagir com o banco de dados ou realizar outras operações
-  
-      res.json({ success: true, message: 'Dados recebidos com sucesso!' });
+        const { description, title, images } = req.body;
+        
+        const newHtml = htmlDefault(title, description, images);
+        //write html file on public folder 
+        try {
+            fs.writeFileSync(`./public/${title.replace(' ', '')}.html`, newHtml);
+        } catch (error) {
+            console.log(error);
+        }
+        
+        
+       
     } catch (error) {
+        console.error('Erro:', error);
+        res.status(500).json({ success: false, message: 'Erro interno no servidor' });
+    }
+});
+
+app.post('/import', upload.fields([{ name: 'recfile', maxCount: 10 }]), async (req, res) => {
+  try {
+      const { description, title } = req.body;
+      const files = req.files.recfile; // Array de arquivos recebidos
+
+      // Converter todas as imagens para base64
+      const imagesBase64 = files.map(file => {
+          const base64 = convertImageToBase64(file.path);
+          fs.unlinkSync(file.path); // Exclui o arquivo após a conversão
+          return base64;
+      });
+
+      // Criar um novo post com as imagens, título e descrição
+      const newPost = {
+          title,
+          description,
+          images: imagesBase64,
+      };
+
+      // Salvar no MongoDB
+      await product.create(newPost);
+      
+
+      res.json({ status: 'success', message: 'Post salvo com sucesso.' });
+  } catch (error) {
       console.error('Erro:', error);
       res.status(500).json({ success: false, message: 'Erro interno no servidor' });
+  }
+});
+
+app.get('/getBrinquedos', async (req, res) => {
+    try {
+        const products = await product.find({}).lean();
+        res.json({ status: 'success', products });
+    } catch (error) {
+        console.error('Erro:', error);
+        res.status(500).json({ success: false, message: 'Erro interno no servidor' });
     }
-  });
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on PORT ${PORT}`);
     console.log(`Server IP address is ${ip.address()}`);
 });
-
