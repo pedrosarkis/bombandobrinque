@@ -1,12 +1,12 @@
 const { forEach } = require("lodash");
 
 module.exports =  modificateHtml = (title, description, images) => {
-    let imagesHtml = '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); grid-gap: 10px;">'; // Contêiner grid
+    let imagesHtml = '<div style="display: flex;justify-content: center; flex-direction: row; ">'; // Contêiner grid
     images.forEach((imageBase64) => {
         imagesHtml += `
-            <div style="width: 250px; height: 250px;"> <!-- Caixa para cada imagem com tamanho fixo -->
-                <a href="#" title="${title}">
-                    <img src="data:image/jpeg;base64,${imageBase64}" alt="${title}" style="width: 100%; height: 100%; object-fit: contain;">
+            <div> <!-- Caixa para cada imagem com tamanho fixo -->
+                <a href="data:image/jpeg;base64,${imageBase64}" title="${title}">
+                    <img src="data:image/jpeg;base64,${imageBase64}" alt="${title}" class="wa-image-thumb ">
                 </a>
             </div>
         `;
@@ -131,13 +131,12 @@ module.exports =  modificateHtml = (title, description, images) => {
                                 <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12 "  data-typeCalculHeight="aft_load" >
                                     <div id="wa-compgallery-kgtzfnjw7gu97s" class="row wa-image-gallery-row-container" >
                                         <div id="wa-image-gallery-col-container-kgtzfnjw7gu97s" class="col-xl-12">
-                                            <div id="wa-image-gallery-row-kgtzfnjw7gu97s" class="row wa-image-gallery-tobind ">
-                                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 "> 
+                                            <div id="wa-image-gallery-row-kgtzfnjw7gu97s" class="row wa-image-gallery-tobind ">            
                                                    ${imagesHtml}
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                
                             </div>
                             <div class="wa-container-vspacer col-xl-12"></div>
                             <div id="wa-row-kgtzfnjw7f09r4" class="row row-align  ">
