@@ -8,7 +8,24 @@ window.onload = async () => {
    brinquedosToAdd.products.forEach(element => {
     const imageType = getImageType(element.images[0]);
 
-    const html = `<div class="wa-subcontainer-wrapper  col-xs-12 col-sm-2 col-md-2 col-lg-2 " >
+    const html = `
+    <style>
+    /* Estilo padrão para dispositivos não móveis */
+    .mobileElement {
+        width: 158px; 
+        height: 119px;
+    }
+
+    /* Media query para dispositivos móveis */
+    @media screen and (max-width: 768px) {
+        .mobileElement {
+            width: 394px; 
+            height: 296px;
+        }
+    }
+</style>
+
+<div class="wa-subcontainer-wrapper  col-xs-12 col-sm-2 col-md-2 col-lg-2 " >
     <div id="wa-sub-container-kfmip0dq3wjdds">
         <div id="wa-row-kfmip0dq9xsr8o" class="row row-align  ">
             <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12 " >
@@ -22,9 +39,9 @@ window.onload = async () => {
         <div id="wa-row-kfmip0dq9xsrdc" class="row row-align  ">
             <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12 "  data-ratioWidth="400" data-ratioHeight="300" >
             <a class="wa-gal-link" href="/wa_p_albums/p_album_jyypl0in0/link/gal_pt.html" data-gal="wa_p_albums/p_album_jyypl0in0/link/gal_pt.json">
-            <img id="wa-compimage-kfmip0dq88mpug" alt="" class="wa-image-component wafxWow zoomIn" 
+            <img id="wa-compimage-kfmip0dq88mpug" alt="" class="wa-image-component wafxWow mobileElement zoomIn" 
                  src=data:${imageType};base64,${element.images[0]}
-                 style="width: 158px; height: 119px;">
+                 >
         </a>
         <div style="height: 10px"> </div>
         
