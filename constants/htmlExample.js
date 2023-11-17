@@ -1,17 +1,17 @@
 const { forEach } = require("lodash");
 
-module.exports =  modificateHtml = (title, description, images) => {
-    let imagesHtml = '<div style="display: flex;justify-content: center; flex-direction: row; ">'; // Contêiner grid
-    images.forEach((imageBase64) => {
-        imagesHtml += `
-            <div> <!-- Caixa para cada imagem com tamanho fixo -->
-                <a href="data:image/jpeg;base64,${imageBase64}" title="${title}">
-                    <img src="data:image/jpeg;base64,${imageBase64}" alt="${title}" class="wa-image-thumb ">
-                </a>
-            </div>
-        `;
-    });
-    imagesHtml += '</div>'; // Fecha o contêiner grid
+module.exports =  modificateHtml = (title, description, images, subtitle) => {
+    let imagesHtml = '<div style="display: flex; justify-content: center; flex-wrap: wrap; align-items: flex-start;">'; // Contêiner grid
+images.forEach((imageBase64) => {
+    imagesHtml += `
+        <div style="padding: 5px; flex-basis: 24%; max-width: 24%;"> <!-- Caixa para cada imagem com tamanho fixo e quebra automática -->
+            <a href="data:image/jpeg;base64,${imageBase64}" title="${title}">
+                <img src="data:image/jpeg;base64,${imageBase64}" alt="${title}" class="wa-image-thumb ">
+            </a>
+        </div>
+    `;
+});
+imagesHtml += '</div>';
     
     
     return `<!DOCTYPE html>
@@ -45,10 +45,7 @@ module.exports =  modificateHtml = (title, description, images) => {
             WaPageContext.lang_filename="pt"
     
         </script>
-        <script src="wa_js/wa_vanilla3f43.js?v=125&amp;" ></script>
-        <link rel="shortcut icon" type="image/png" href="wa_images/favicon_1.png" />
-        <!-- LiveZilla Chat Button Link Code (ALWAYS PLACE IN BODY ELEMENT) --><!-- LiveZilla Tracking Code (ALWAYS PLACE IN BODY ELEMENT) --><div id="livezilla_tracking" style="display:none"></div><script type="text/javascript">
-        var script = document.createElement("script");script.async=true;script.type="text/javascript";var src = "https://www.webchatonline.com.br/atendimento/server.php?ws=d3d3LmJvbWJhbmRvYnJpbnF1ZS5jb20uYnI_&amp;rqst=track&amp;output=jcrpt&amp;hcgs=MQ__&amp;htgs=MQ__&amp;fbpos=22&amp;fbml=0&amp;fbmt=0&amp;fbmr=0&amp;fbmb=0&amp;fbw=190&amp;fbh=190&amp;nse="+Math.random();setTimeout("script.src=src;document.getElementById('livezilla_tracking').appendChild(script)",1);</script><noscript><img src="https://www.webchatonline.com.br/atendimento/server.php?ws=d3d3LmJvbWJhbmRvYnJpbnF1ZS5jb20uYnI_&amp;rqst=track&amp;output=nojcrpt&amp;hcgs=MQ__&amp;htgs=MQ__&amp;fbpos=22&amp;fbml=0&amp;fbmt=0&amp;fbmr=0&amp;fbmb=0&amp;fbw=190&amp;fbh=190" width="0" height="0" style="visibility:hidden;" alt=""></noscript><!-- http://www.LiveZilla.net Tracking Code --><div style="display:none;"><a href="javascript:void(window.open('https://www.webchatonline.com.br/atendimento/chat.php?ws=d3d3LmJvbWJhbmRvYnJpbnF1ZS5jb20uYnI_&amp;hcgs=MQ__&amp;htgs=MQ__','','width=550,height=700,left=0,top=0,resizable=yes,menubar=no,location=no,status=yes,scrollbars=yes'))" class="lz_fl"><img id="chat_button_image" src="https://www.webchatonline.com.br/atendimento/image.php?ws=d3d3LmJvbWJhbmRvYnJpbnF1ZS5jb20uYnI_&amp;id=1&amp;type=overlay" width="190" height="190" style="border:0px;" alt="LiveZilla Live Chat Software"></a></div><!-- http://www.decolarhost.com.br/livezilla Chat Button Link Code -->
+       
     </head>
     <body>
         <div id="preloader"></div>
@@ -170,11 +167,9 @@ module.exports =  modificateHtml = (title, description, images) => {
                             <div id="wa-row-kgtzfnjw7f09xk" class="row row-align  ">
                                 <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12 " >
                                     <div id="wa-comptext-kgtzfnjx6tw7js" class="wa-comptext clearfix">
-                                        <p class="wa_style_jyoqycgx5q3kmo" style="text-align: center;"><span style="color: #5c5c5c; font-size: 20px;">${title}</span></p>
+                                        <p class="wa_style_jyoqycgx5q3kmo" style="text-align: center;"><span style="color: #5c5c5c; font-size: 20px;">${subtitle}</span></p>
                                         <p> ${description}</p>
-                                        <p
-                                         class="wa_style_jyoqycgx5q3kmo"><span style="color: #5c5c5c;">Clique para saber mais sobre os brinquedos</span></p>
-                                        <p class="wa_style_jyoqycgx5q3kmo"><span style="color: #5c5c5c;">Buscas relacionadas: aluguel de cama elástica, brinquedos inflável aluguel, locação brinquedos festas, cama elástica para locação, aluguel brinquedo inflável, locação cama elástica, aluguel cama elástica, locação pula-pula gigante, aluguel pula-pula gigante.</span></p>
+                                       
                                     </div>
                                 </div>
                             </div>

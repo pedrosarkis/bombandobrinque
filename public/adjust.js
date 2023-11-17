@@ -1,9 +1,10 @@
 window.onload = async () => {
    const brinquedosToAdd = await (await fetch('/getBrinquedos')).json();
-
-   const divToAdd = document.getElementById('wa-row-kfmip0dq9xst6o');
    debugger;
 
+   const divToAdd = document.getElementById('wa-row-kfmip0dq9xst6o');
+   
+   const elementsToSend = []; 
    brinquedosToAdd.products.forEach(element => {
     const imageType = getImageType(element.images[0]);
 
@@ -33,7 +34,10 @@ window.onload = async () => {
         </div>
     </div>
 </div>`
-debugger;
+elementsToSend.push(element);
+divToAdd.insertAdjacentHTML('beforebegin', html);
+});
+
 try {
     const generateHtml = fetch('/writeHTML', {
         method: 'POST',
@@ -41,16 +45,11 @@ try {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
         },
-        body: JSON.stringify(element)
+        body: JSON.stringify(elementsToSend)
     });
 } catch (error) {
     console.log(error, 'error generating html')
 }
-
-
-    divToAdd.insertAdjacentHTML('beforebegin', html);
-});
-
 }
 
 function getImageType(base64) {

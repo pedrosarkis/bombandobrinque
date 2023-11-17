@@ -17,6 +17,7 @@ fileInput.addEventListener('change', function () {
       // Adiciona outros dados ao FormData
       formData.append('title', document.getElementById('title').value);
       formData.append('description', document.getElementById('description').value);
+      formData.append('subtitle', document.getElementById('subtitle').value);
 
       enviarDadosParaServidor(formData);
     } else {

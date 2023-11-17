@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 const product = require('./model');
 const _ = require('lodash');
 const fs = require('fs');
+const path = require('path');
+const { v4: uuidv4 } = require('uuid');
 // use dotenv 
 require('dotenv').config();
 const htmlDefault = require('./constants/htmlExample');
@@ -22,10 +24,10 @@ function convertImageToBase64(filePath) {
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, 'uploads/') // Pasta onde as imagens serão armazenadas
+      cb(null, 'uploads/')
     },
     filename: function (req, file, cb) {
-      cb(null, file.fieldname + '-' + Date.now() + '.jpg')
+      cb(null, file.fieldname + '-' + uuidv4() + path.extname(file.originalname));
     }
 });
 
@@ -42,7 +44,7 @@ const upload = multer({
 
 app.use(express.static('public'));
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
@@ -54,17 +56,15 @@ app.get('/import',  (req, res) => {
 
 app.post('/writeHTML', async (req, res) => {
     try {
-        const { description, title, images } = req.body;
-        
-        const newHtml = htmlDefault(title, description, images);
-        //write html file on public folder 
-        try {
-            fs.writeFileSync(`./public/${title.replace(' ', '')}.html`, newHtml);
-        } catch (error) {
-            console.log(error);
-        }
-        
-        
+        const htmlsToCreate = req.body;
+        htmlsToCreate.forEach(({title, description, images, subtitle}) => {
+            const newHtml = htmlDefault(title, description, images, subtitle);
+            try {
+                fs.writeFileSync(`./public/${title.replace(' ', '')}.html`, newHtml);
+            } catch (error) {
+                console.log(error);
+            }
+        });
        
     } catch (error) {
         console.error('Erro:', error);
@@ -74,7 +74,7 @@ app.post('/writeHTML', async (req, res) => {
 
 app.post('/import', upload.fields([{ name: 'recfile', maxCount: 10 }]), async (req, res) => {
   try {
-      const { description, title } = req.body;
+      const { description, title, subtitle } = req.body;
       const files = req.files.recfile; // Array de arquivos recebidos
 
       // Converter todas as imagens para base64
@@ -89,6 +89,7 @@ app.post('/import', upload.fields([{ name: 'recfile', maxCount: 10 }]), async (r
           title,
           description,
           images: imagesBase64,
+          subtitle
       };
 
       // Salvar no MongoDB
