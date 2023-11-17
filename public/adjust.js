@@ -21,10 +21,13 @@ window.onload = async () => {
         <div class="wa-container-vspacer col-xl-12"></div>
         <div id="wa-row-kfmip0dq9xsrdc" class="row row-align  ">
             <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12 "  data-ratioWidth="400" data-ratioHeight="300" >
-                <a class="wa-gal-link" href="/wa_p_albums/p_album_jyypl0in0/link/gal_pt.html" data-gal="wa_p_albums/p_album_jyypl0in0/link/gal_pt.json" >
-                    <img id="wa-compimage-kfmip0dq88mpug" alt="" class="wa-image-component  wafxWow zoomIn" src=data:${imageType};base64,${element.images[0]}>
-
-                </a></div>
+            <a class="wa-gal-link" href="/wa_p_albums/p_album_jyypl0in0/link/gal_pt.html" data-gal="wa_p_albums/p_album_jyypl0in0/link/gal_pt.json">
+            <img id="wa-compimage-kfmip0dq88mpug" alt="" class="wa-image-component wafxWow zoomIn" 
+                 src=data:${imageType};base64,${element.images[0]}
+                 style="width: 158px; height: 119px;">
+        </a>
+        <div style="height: 10px"> </div>
+        
         </div>
         <div class="wa-container-vspacer col-xl-12"></div>
         <div id="wa-row-kfmip0dq9xstbc" class="row row-align  ">
