@@ -26,7 +26,7 @@ fileInput.addEventListener('change', function () {
   });
 });
 
-function enviarDadosParaServidor(formData) {
+async function enviarDadosParaServidor(formData) {
   // URL do servidor
   const url = '/import';
 
@@ -37,13 +37,17 @@ function enviarDadosParaServidor(formData) {
   };
 
   // Envio da requisição
-  fetch(url, options)
-    .then(response => response.json())
-    .then(data => {
-      console.log('Resposta do servidor:', data);
-    })
-    .catch(error => {
-      console.error('Erro ao enviar dados:', error);
-      // Aqui você pode lidar com erros, como exibir uma mensagem de erro
-    });
+  try {
+    const response = await (await fetch(url, options)).json();
+    if(response.status === 200) {
+      alert('Imagem enviada com sucesso!');
+    } else {
+      alert('Erro ao enviar imagem!');
+    }
+  } catch (error) {
+    alert('Erro ao enviar imagem!');
+  }
+  
+
+  
 }

@@ -96,7 +96,7 @@ app.post('/import', upload.fields([{ name: 'recfile', maxCount: 10 }]), async (r
       await product.create(newPost);
       
 
-      res.json({ status: 'success', message: 'Post salvo com sucesso.' });
+      res.status(200).json({ status: 'success', message: 'Post salvo com sucesso.' });
   } catch (error) {
       console.error('Erro:', error);
       res.status(500).json({ success: false, message: 'Erro interno no servidor' });
