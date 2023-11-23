@@ -38,7 +38,7 @@ async function enviarDadosParaServidor(formData) {
 
   // Envio da requisição
   try {
-    const response = await (await fetch(url, options)).json();
+    const response = await fetch(url, options);
     if(response.status === 200) {
       alert('Imagem enviada com sucesso!');
     } else {
