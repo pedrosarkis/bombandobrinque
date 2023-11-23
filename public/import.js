@@ -41,6 +41,8 @@ async function enviarDadosParaServidor(formData) {
     const response = await fetch(url, options);
     if(response.status === 200) {
       alert('Imagem enviada com sucesso!');
+      //redirect to https://bombando-brinque.onrender.com/escolha-seus-brinquedos.html
+      window.location.href = 'https://bombando-brinque.onrender.com/escolha-seus-brinquedos.html';
     } else {
       alert('Erro ao enviar imagem!');
     }
